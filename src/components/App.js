@@ -1,5 +1,9 @@
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+
+import Numbers from './Numbers';
+import Search from './Search';
+import AddForm from './AddForm';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -34,21 +38,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      search:
-      <input onChange={({ target }) => setSearchTerm(target.value.toLowerCase())} />
-      <form>
-        <div>name: 
-          <input value={newName} onChange={({ target }) => setNewName(target.value)} />
-        </div>
-        <div>number:
-         <input value={newNumber} onChange={({ target }) => setNewNumber(target.value)} />
-        </div>
-        <div>
-          <button type="submit" onClick={e => handleAdd(e)}>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-        {personsToShow.map(person => <div>{person.name} {person.number}</div>)}
+      <Search setSearch={setSearchTerm}  />
+      <h3>Add new number</h3>
+      <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} name={newName} number={newNumber}/>
+      <h3>Numbers</h3>
+      <Numbers personsList={personsToShow} />
     </div>
   )
 }
