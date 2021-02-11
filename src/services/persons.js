@@ -16,4 +16,10 @@ const deletePerson = id => {
   return axios.delete(`${apiUrl}/${id}`);
 }
 
-export default { addPerson, getAllPersons, deletePerson };
+const editPerson = (id, update) => {
+  return axios.put(`${apiUrl}/${id}`, update)
+    .then(({ data }) => data); // this value is undefined; json server is not return the updated record
+}
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default { addPerson, getAllPersons, deletePerson, editPerson };

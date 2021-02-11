@@ -7,7 +7,7 @@ import AddForm from './AddForm';
 import personsService from '../services/persons';
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchTerm, setSearchTerm ] = useState('')
@@ -24,12 +24,12 @@ const App = () => {
     // check if person has already been added
     if (!persons.find(p => p.name === newName)) {
       // make new person object 
-      const newPerson = {
+      const newEntry = {
         name: newName,
         number: newNumber
       }
       // make POST request
-      personsService.addPerson(newPerson)
+      personsService.addPerson(newEntry)
         .then(data => {
           // update state with newly added person
           setPersons(persons.concat(data));
@@ -37,10 +37,24 @@ const App = () => {
           setNewName('');
           setNewNumber('');
         });
-      
     } else {
-      window.alert(`${newName} is already in phonebook`);
-      setNewName('');
+        window.alert(`${newName} is already in phonebook, replace number with new one?`);
+        // find person with matching name
+        const person = persons.find(p => p.name === newName);
+        // make updated person object by copying old person object and replacing number with newNumber 
+        const updated = {
+          ...person,
+          number: newNumber 
+        }
+        // make PUT request
+        personsService.editPerson(person.id, updated)
+          .then(() => {
+            // update the application state with edited person object
+            setPersons(persons.map(p => p.id === person.id ? updated : p));
+            // clear text inputs
+            setNewName('');
+            setNewNumber('');
+          });
     }
   }
 
