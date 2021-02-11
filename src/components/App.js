@@ -64,7 +64,16 @@ const App = () => {
             // clear text inputs
             setNewName('');
             setNewNumber('');
+          })
+          .catch(() => {
+            // set error notification
+            setNotification(`error: cannot find ${newName}`);
+            // remove notification
+            setTimeout(() => setNotification(null), 3000)
           });
+          // clear text inputs
+          setNewName('');
+          setNewNumber('');
     }
   }
 
