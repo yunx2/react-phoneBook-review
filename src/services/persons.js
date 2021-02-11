@@ -12,4 +12,8 @@ const addPerson = newPerson => {
     .then(({ data }) => data); // returns a promise!
 }
 
-export default { addPerson, getAllPersons };
+const deletePerson = id => {
+  return axios.delete(`${apiUrl}/${id}`);
+}
+
+export default { addPerson, getAllPersons, deletePerson };

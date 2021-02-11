@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import Numbers from './Numbers';
 import Search from './Search';
@@ -45,6 +44,19 @@ const App = () => {
     }
   }
 
+  const handleDelete = name => {
+    // show warning
+    window.alert(`delete ${name}?`)
+    // search persons for id
+    const id = persons.find(p => p.name === name).id;
+    // make DELETE request
+    personsService.deletePerson(id)
+      .then(() => {
+        // change state to match server
+        setPersons(persons.filter(p => p.id !== id));
+      })
+  }
+
   const personsToShow = searchTerm === '' ? persons 
     : persons.filter(p => p.name.toLowerCase().includes(searchTerm))
 
@@ -55,7 +67,7 @@ const App = () => {
       <h3>Add new number</h3>
       <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} name={newName} number={newNumber}/>
       <h3>Numbers</h3>
-      <Numbers personsList={personsToShow} />
+      <Numbers personsList={personsToShow} handler={handleDelete} />
     </div>
   )
 }
