@@ -5,6 +5,7 @@ import axios from 'axios';
 import Numbers from './Numbers';
 import Search from './Search';
 import AddForm from './AddForm';
+import personsService from '../services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -13,22 +14,31 @@ const App = () => {
   const [ searchTerm, setSearchTerm ] = useState('')
 
   const getAllPersons = () => {
-    axios.get("http://localhost:3001/persons")
-      .then(({ data }) => setPersons(data))
+    personsService.getAllPersons()
+      .then(data => setPersons(data))
   }
 
   useEffect(getAllPersons, [])
 
   const handleAdd = e => {
     e.preventDefault();
+    // check if person has already been added
     if (!persons.find(p => p.name === newName)) {
+      // make new person object 
       const newPerson = {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(newPerson));
-      setNewName('');
-      setNewNumber('');
+      // make POST request
+      personsService.addPerson(newPerson)
+        .then(data => {
+          // update state with newly added person
+          setPersons(persons.concat(data));
+          // clear input fields
+          setNewName('');
+          setNewNumber('');
+        });
+      
     } else {
       window.alert(`${newName} is already in phonebook`);
       setNewName('');
