@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Numbers from './Numbers';
 import Search from './Search';
 import AddForm from './AddForm';
+import Notification from './Notification'
 import personsService from '../services/persons';
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchTerm, setSearchTerm ] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   const getAllPersons = () => {
     personsService.getAllPersons()
@@ -33,6 +35,10 @@ const App = () => {
         .then(data => {
           // update state with newly added person
           setPersons(persons.concat(data));
+          // set success notification
+          setNotification(`${newName} added`)
+          // remove notification
+          setTimeout(() => setNotification(null), 3000)
           // clear input fields
           setNewName('');
           setNewNumber('');
@@ -51,6 +57,10 @@ const App = () => {
           .then(() => {
             // update the application state with edited person object
             setPersons(persons.map(p => p.id === person.id ? updated : p));
+            // success notification
+            setNotification(`${newName}'s number has been changed`)
+            // remove notification
+            setTimeout(() => setNotification(null), 3000)
             // clear text inputs
             setNewName('');
             setNewNumber('');
@@ -68,6 +78,10 @@ const App = () => {
       .then(() => {
         // change state to match server
         setPersons(persons.filter(p => p.id !== id));
+        // success notification
+        setNotification(`${name} has been deleted`)
+        // remove notification
+        setTimeout(() => setNotification(null), 3000)
       })
   }
 
@@ -77,6 +91,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Search setSearch={setSearchTerm}  />
       <h3>Add new number</h3>
       <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} name={newName} number={newNumber}/>
