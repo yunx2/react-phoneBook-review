@@ -74,7 +74,7 @@ const App = () => {
           // clear text inputs
           setNewName('');
           setNewNumber('');
-    }
+    } 
   }
 
   const handleDelete = name => {
