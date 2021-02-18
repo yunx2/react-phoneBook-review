@@ -105,17 +105,19 @@ const App = () => {
   return (
     <Router>
       <div>
-        <h2>phonebook contacts</h2>
+        <h2>phonebook</h2>
         <Notification message={notification} />
-        <Search setSearch={setSearchTerm}  />
-        <h3>Add new number</h3>
-        <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} setAddress={setAddress} setNotes={setNotes} name={newName} number={newNumber} address={address} notes={notes} />
-        <h3>Numbers</h3>
+        
+        
         <Switch>
         <Route path='/contacts/:id'>
           <Contact />
         </Route>    
         <Route path='/'>
+          <Search setSearch={setSearchTerm}  />
+          <h3>Add new number</h3>
+          <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} setAddress={setAddress} setNotes={setNotes} name={newName} number={newNumber} address={address} notes={notes} />
+          <h3>Contacts</h3>
           <Numbers list={displayedContacts} handler={handleDelete} />
         </Route>
         </Switch>
