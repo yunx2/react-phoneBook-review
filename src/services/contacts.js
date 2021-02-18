@@ -1,25 +1,25 @@
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:3001/api/persons';
+const apiUrl = 'http://localhost:3001/api/contacts';
 
-const getAllPersons = () => {
+export const getAllContacts = () => {
   return axios.get(apiUrl)
     .then(({ data }) => data)
 }
 
-const addPerson = newPerson => {
+export const addContact = newPerson => {
   return axios.post(apiUrl, newPerson)
     .then(({ data }) => data); // returns a promise!
 }
 
-const deletePerson = id => {
+export const deleteContact = id => {
   return axios.delete(`${apiUrl}/${id}`);
 }
 
-const editPerson = (id, update) => {
+export const editContact = (id, update) => {
   return axios.put(`${apiUrl}/${id}`, update)
     .then(({ data }) => data); // this value is undefined; json server is not return the updated record
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { addPerson, getAllPersons, deletePerson, editPerson };
+// export default { addContact, getAllContacts, deleteContact, editContact };

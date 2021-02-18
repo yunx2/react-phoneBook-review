@@ -5,36 +5,34 @@ import Numbers from './Numbers';
 import Search from './Search';
 import AddForm from './AddForm';
 import Notification from './Notification'
-import personsService from '../services/persons';
+import { addContact, getAllContacts, deleteContact, editContact } from '../services/contacts';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([])
+  const [ contactList, setContactList ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchTerm, setSearchTerm ] = useState('')
   const [ notification, setNotification ] = useState(null)
 
-  const getAllPersons = () => {
-    personsService.getAllPersons()
-      .then(data => setPersons(data))
-  }
-
-  useEffect(getAllPersons, [])
+  useEffect(() => {
+    getAllContacts()
+      .then(data => setContactList(data))
+  }, [])
 
   const handleAdd = e => {
     e.preventDefault();
     // check if person has already been added
-    if (!persons.find(p => p.name === newName)) {
+    if (!contactList.find(p => p.name === newName)) {
       // make new person object 
       const newEntry = {
         name: newName,
         number: newNumber
       }
       // make POST request
-      personsService.addPerson(newEntry)
+      addContact(newEntry)
         .then(data => {
           // update state with newly added person
-          setPersons(persons.concat(data));
+          setContactList(contactList.concat(data));
           // set success notification
           setNotification(`${newName} added`)
           // remove notification
@@ -46,17 +44,17 @@ const App = () => {
     } else {
         window.alert(`${newName} is already in phonebook, replace number with new one?`);
         // find person with matching name
-        const person = persons.find(p => p.name === newName);
+        const entry = contactList.find(p => p.name === newName);
         // make updated person object by copying old person object and replacing number with newNumber 
-        const updated = {
-          ...person,
+        const updatedEntry = {
+          ...entry,
           number: newNumber 
         }
         // make PUT request
-        personsService.editPerson(person.id, updated)
+        editContact(entry.id, updatedEntry)
           .then(() => {
             // update the application state with edited person object
-            setPersons(persons.map(p => p.id === person.id ? updated : p));
+            setContactList(contactList.map(p => p.id === entry.id ? updatedEntry : p));
             // success notification
             setNotification(`${newName}'s number has been changed`)
             // remove notification
@@ -81,12 +79,12 @@ const App = () => {
     // show warning
     window.alert(`delete ${name}?`)
     // search persons for id
-    const id = persons.find(p => p.name === name).id;
+    const id = contactList.find(p => p.name === name).id;
     // make DELETE request
-    personsService.deletePerson(id)
+    deleteContact(id)
       .then(() => {
         // change state to match server
-        setPersons(persons.filter(p => p.id !== id));
+        setContactList(contactList.filter(p => p.id !== id));
         // success notification
         setNotification(`${name} has been deleted`)
         // remove notification
@@ -94,18 +92,18 @@ const App = () => {
       })
   }
 
-  const personsToShow = searchTerm === '' ? persons 
-    : persons.filter(p => p.name.toLowerCase().includes(searchTerm))
+  const displayedContacts = searchTerm === '' ? contactList 
+    : contactList.filter(p => p.name.toLowerCase().includes(searchTerm))
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>phonebook contacts</h2>
       <Notification message={notification} />
       <Search setSearch={setSearchTerm}  />
       <h3>Add new number</h3>
       <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} name={newName} number={newNumber}/>
       <h3>Numbers</h3>
-      <Numbers personsList={personsToShow} handler={handleDelete} />
+      <Numbers list={displayedContacts} handler={handleDelete} />
     </div>
   )
 }
