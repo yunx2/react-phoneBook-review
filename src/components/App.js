@@ -9,7 +9,7 @@ import { addContact, getAllContacts, deleteContact, editContact } from '../servi
 
 const App = () => {
   const [ contactList, setContactList ] = useState([])
-  
+
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ address, setAddress ] = useState('')
@@ -44,6 +44,8 @@ const App = () => {
           // clear input fields
           setNewName('');
           setNewNumber('');
+          setAddress('');
+          setNotes('');
         });
     } else {
         window.alert(`${newName} is already in phonebook, replace number with new one?`);
