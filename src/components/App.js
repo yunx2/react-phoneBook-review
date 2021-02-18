@@ -9,8 +9,12 @@ import { addContact, getAllContacts, deleteContact, editContact } from '../servi
 
 const App = () => {
   const [ contactList, setContactList ] = useState([])
+  
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ address, setAddress ] = useState('')
+  const [ notes, setNotes ] = useState('')
+
   const [ searchTerm, setSearchTerm ] = useState('')
   const [ notification, setNotification ] = useState(null)
 
@@ -101,7 +105,7 @@ const App = () => {
       <Notification message={notification} />
       <Search setSearch={setSearchTerm}  />
       <h3>Add new number</h3>
-      <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} name={newName} number={newNumber}/>
+      <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} setAddress={setAddress} setNotes={setNotes} name={newName} number={newNumber} address={address} notes={notes} />
       <h3>Numbers</h3>
       <Numbers list={displayedContacts} handler={handleDelete} />
     </div>
