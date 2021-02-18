@@ -1,10 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Numbers from './Numbers';
 import Search from './Search';
 import AddForm from './AddForm';
-import Notification from './Notification'
+import Notification from './Notification';
+import Contact from './Contact';
 import { addContact, getAllContacts, deleteContact, editContact } from '../services/contacts';
 
 const App = () => {
@@ -102,15 +103,24 @@ const App = () => {
     : contactList.filter(p => p.name.toLowerCase().includes(searchTerm))
 
   return (
-    <div>
-      <h2>phonebook contacts</h2>
-      <Notification message={notification} />
-      <Search setSearch={setSearchTerm}  />
-      <h3>Add new number</h3>
-      <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} setAddress={setAddress} setNotes={setNotes} name={newName} number={newNumber} address={address} notes={notes} />
-      <h3>Numbers</h3>
-      <Numbers list={displayedContacts} handler={handleDelete} />
-    </div>
+    <Router>
+      <div>
+        <h2>phonebook contacts</h2>
+        <Notification message={notification} />
+        <Search setSearch={setSearchTerm}  />
+        <h3>Add new number</h3>
+        <AddForm handler={handleAdd} setName={setNewName} setNumber={setNewNumber} setAddress={setAddress} setNotes={setNotes} name={newName} number={newNumber} address={address} notes={notes} />
+        <h3>Numbers</h3>
+        <Switch>
+        <Route path='/contacts/:id'>
+          <Contact />
+        </Route>    
+        <Route path='/'>
+          <Numbers list={displayedContacts} handler={handleDelete} />
+        </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
