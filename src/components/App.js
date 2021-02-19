@@ -31,7 +31,9 @@ const App = () => {
       // make new person object 
       const newEntry = {
         name: newName,
-        number: newNumber
+        number: newNumber,
+        address: address || '',
+        notes: notes || ''
       }
       // make POST request
       addContact(newEntry)
@@ -49,13 +51,15 @@ const App = () => {
           setNotes('');
         });
     } else {
-        window.alert(`${newName} is already in phonebook, replace number with new one?`);
+        // window.alert(`${newName} is already in phonebook, replace number with new one?`);
         // find person with matching name
         const entry = contactList.find(p => p.name === newName);
         // make updated person object by copying old person object and replacing number with newNumber 
         const updatedEntry = {
           ...entry,
-          number: newNumber 
+          number: newNumber,
+          address,
+          notes
         }
         // make PUT request
         editContact(entry.id, updatedEntry)
@@ -63,7 +67,7 @@ const App = () => {
             // update the application state with edited person object
             setContactList(contactList.map(p => p.id === entry.id ? updatedEntry : p));
             // success notification
-            setNotification(`${newName}'s number has been changed`)
+            setNotification(`${newName}'s contact info updated`)
             // remove notification
             setTimeout(() => setNotification(null), 3000)
             // clear text inputs
@@ -79,6 +83,8 @@ const App = () => {
           // clear text inputs
           setNewName('');
           setNewNumber('');
+          setAddress('');
+          setNotes('');
     } 
   }
 
@@ -107,8 +113,6 @@ const App = () => {
       <div>
         <h2>phonebook</h2>
         <Notification message={notification} />
-        
-        
         <Switch>
         <Route path='/contacts/:id'>
           <Contact />
